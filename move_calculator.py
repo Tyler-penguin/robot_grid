@@ -26,7 +26,7 @@ def initializations(filename):
                 padded_matrix[row+1].append(num)
             padded_matrix[row+1].append(None)
         padded_matrix.append([None for i in range(collen+2)])
-    return pos, 50, padded_matrix
+    return pos, moves, padded_matrix
 
 def write_to_file(move_list):
     my_dir = os.path.dirname(os.path.realpath(__file__))
