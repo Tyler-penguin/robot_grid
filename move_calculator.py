@@ -28,9 +28,9 @@ def initializations(filename):
         padded_matrix.append([None for i in range(collen+2)])
     return pos, moves, padded_matrix
 
-def write_to_file(move_list):
-    my_dir = os.path.dirname(os.path.realpath(__file__))
-    with open(my_dir + '/' + 'robot.moves', 'w') as f:
+def write_to_file(move_list, filename):
+
+    with open(filename, 'w') as f:
         f.write('row, col\n')
         for move in move_list:
             f.write(f'{move[0]}, {move[1]}\n')
@@ -61,21 +61,22 @@ def recursive_step(pos, moves, matrix, total, max, move_list, max_move_list, end
 def mark_zeros(matrix, pos, moves):
     matrix[pos[0]][pos[1]] = 0
     for movement in moves:
-        pos[0] += movement[0]
-        pos[1] += movement[1]
-        matrix[pos[0]][pos[1]] = 0
+        if matrix[pos[0] + movement[0]][pos[1] + movement[1]] != None:
+            pos[0] += movement[0]
+            pos[1] += movement[1]
+            matrix[pos[0]][pos[1]] = 0
     return matrix
 
-def find_moves(filename):
-    pos, moves, matrix = initializations(filename)
+def find_moves(in_filename, out_filename):
+    pos, moves, matrix = initializations(in_filename)
     pos[0] +=1
     pos[1] +=1
     chunk_size = 6
-    if moves > 50:
+    if moves > 60:
         chunk_size = 5
-        if moves > 300:
+        if moves > 340:
             chunk_size = 4
-            if moves > 2250:
+            if moves > 2400:
                 chunk_size = 3
     move_list = []
     spot_value = matrix[pos[0]][pos[1]]
@@ -92,11 +93,16 @@ def find_moves(filename):
     [new_max, move_order, _] = recursive_step(pos, moves%chunk_size, matrix, spot_value, 0, [], [], pos)
     max+=new_max
     move_list += move_order
-    write_to_file(move_list)
+    write_to_file(move_list, out_filename)
 
+def find_moves_many_maps(filenames):
+    my_dir = os.path.dirname(os.path.realpath(__file__))
+    for filename in filenames:
+        terms = filename.split('.')
+        size = terms[2]
+        in_filename = my_dir + '/' + filename
+        out_filename = my_dir + '/' + f'robot.moves.{size}.Tyler.csv'
+        find_moves(in_filename, out_filename)
 
-my_dir = os.path.dirname(os.path.realpath(__file__))
-filename = 'robot.map.100x100.csv'
-filename = my_dir + '/' + filename
-## Be careful as the BigO is 9^x ##
-find_moves(filename)
+filenames = ('robot.map.20x20.TO_USE.csv', 'robot.map.50x20.TO_USE.csv', 'robot.map.40x40.TO_USE.csv', 'robot.map.100x100.TO_USE.csv')
+find_moves_many_maps(filenames)
