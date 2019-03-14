@@ -74,9 +74,9 @@ def find_moves(in_filename, out_filename):
     chunk_size = 6
     if moves > 100:
         chunk_size = 5
-        if moves > 500:
+        if moves > 1000:
             chunk_size = 4
-            if moves > 2500:
+            if moves > 10000:
                 chunk_size = 3
     move_list = []
     spot_value = matrix[pos[0]][pos[1]]
