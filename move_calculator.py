@@ -65,18 +65,18 @@ def mark_zeros(matrix, pos, moves):
             pos[0] += movement[0]
             pos[1] += movement[1]
             matrix[pos[0]][pos[1]] = 0
-    return matrix
+    return matrix, pos
 
 def find_moves(in_filename, out_filename):
     pos, moves, matrix = initializations(in_filename)
     pos[0] +=1
     pos[1] +=1
     chunk_size = 6
-    if moves > 60:
+    if moves > 100:
         chunk_size = 5
-        if moves > 340:
+        if moves > 500:
             chunk_size = 4
-            if moves > 2400:
+            if moves > 2500:
                 chunk_size = 3
     move_list = []
     spot_value = matrix[pos[0]][pos[1]]
@@ -86,8 +86,8 @@ def find_moves(in_filename, out_filename):
         maxes = recursive_step(pos, chunk_size, matrix, spot_value, 0, [], [], pos)
 
         max+=maxes[0]
-        matrix = mark_zeros(matrix, pos, maxes[1])
-        pos = maxes[2]
+        matrix, pos = mark_zeros(matrix, pos, maxes[1])
+        # pos = maxes[2]
         move_list += maxes[1]
     # print(maxes)
     [new_max, move_order, _] = recursive_step(pos, moves%chunk_size, matrix, spot_value, 0, [], [], pos)
