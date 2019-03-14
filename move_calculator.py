@@ -31,9 +31,9 @@ def initializations(filename):
 def write_to_file(move_list, filename):
 
     with open(filename, 'w') as f:
-        f.write('row, col\n')
+        f.write('row,col\n')
         for move in move_list:
-            f.write(f'{move[0]}, {move[1]}\n')
+            f.write(f'{move[0]},{move[1]}\n')
 
 def recursive_step(pos, moves, matrix, total, max, move_list, max_move_list, end_pos):
     if moves == 0:
@@ -74,10 +74,8 @@ def find_moves(in_filename, out_filename):
     chunk_size = 6
     if moves > 100:
         chunk_size = 5
-        if moves > 1000:
+        if moves > 10000:
             chunk_size = 4
-            if moves > 10000:
-                chunk_size = 3
     move_list = []
     spot_value = matrix[pos[0]][pos[1]]
     matrix[pos[0]][pos[1]]=0
